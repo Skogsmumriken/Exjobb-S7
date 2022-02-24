@@ -1,0 +1,101 @@
+<html>
+  <head>
+    <!-- Moralis SDK code -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="https://unpkg.com/moralis/dist/moralis.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <h1>Gas Stats With Moralis</h1>
+
+    <p>A fetched NFT!</p>
+
+    <section class="content-wrapper">
+      
+      <section id="printings">
+
+    </section>
+
+    <button id="btn-login">Moralis Login</button>
+    <button id="btn-logout">Logout</button>
+    <button onclick="window.location.href='ipfs.html'">Upload to IPFS</button>
+
+    <script>
+        // skriv funktion som skapar JSON fil automatiskt- Varje ny 1155-NFT måste ha en egen json-fil
+    
+        const printingContainer = document.getElementById("printings");
+      
+        // connect to Moralis server
+
+        const serverUrl = "https://3annjbia1vgr.usemoralis.com:2053/server";
+        const appId = "aBJvVjmxBnIis9vINNfTCr4qv010ZHKtBGmdX5sq";
+        Moralis.start({ serverUrl, appId });
+
+        // add from here down
+        async function login() {
+        let user = Moralis.User.current();
+        if (!user) {
+            user = await Moralis.authenticate();
+        }
+        console.log("logged in user:", user);
+        }
+
+        async function logOut() {
+        await Moralis.User.logOut();
+        console.log("logged out");
+        }
+
+        async function getTokenBalances(){
+            const options = { chain: 'matic'}
+            const balances = await Moralis.Web3API.account.getTokenBalances(options);
+            console.log(balances);
+        }
+        function fixURL(url) {
+                    if(url.startsWith("ipfs")) {
+                        return "https://ipfs.moralis.io:2053/ipfs/"+url.split("ipfs://").slice(-1);
+                       
+                    }else {
+                        return url;
+                    }
+        }
+
+
+        async function getNFTs(){
+            const options = { chain: 'matic' };
+            const polygonNFTs = await Moralis.Web3API.account.getNFTs(options);
+            polygonNFTs.result.forEach(element => {
+
+                url = element.token_uri;
+
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onload = function() {
+                myObj = JSON.parse(this.response);
+
+
+                printingContainer.innerHTML += `<img width="300" alt="BAP" src=${fixURL(myObj.image)}>`;
+                }
+                xmlhttp.open("GET", url, true);
+                xmlhttp.send();
+            
+                printingContainer.innerHTML += `<p>${element.name} <br>${element.token_address}</p>`;
+
+                /*fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Fetched data is: " + data);
+                    console.log(data.name);
+                    console.log(fixURL(data.image));
+                    $("#content").html($("#content").html()+"<h2>"+data.name+"</h2>");
+                    //$("#content").html($("#content").html()+"<h3>"+data.description+"</h3>");
+                    $("#content").html($("#content").html()+"<img width=100 height=100 src = '" + fixURL(data.image) + "'/>");
+                });*/
+            })
+        }
+   
+            //console.log(polygonNFTs.result[0]);
+
+        document.getElementById("btn-login").onclick = login;
+        document.getElementById("btn-logout").onclick = logOut;
+    </script>
+  </body>
+</html>
