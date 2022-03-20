@@ -1,9 +1,11 @@
+<!DOCTYPE html>
 <html>
   <head>
     <!-- Moralis SDK code -->
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <script src="https://unpkg.com/moralis/dist/moralis.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>Login</title>
   </head>
   <body>
     <h1>Gas Stats With Moralis</h1>
@@ -18,7 +20,7 @@
 
     <button id="btn-login">Moralis Login</button>
     <button id="btn-logout">Logout</button>
-    <button onclick="window.location.href='ipfs.html'">Upload to IPFS</button>
+    <!--<button onclick="window.location.href='ipfs.html'">Upload to IPFS</button>      // replaced in login function.-->
 
     <script>
         // skriv funktion som skapar JSON fil automatiskt- Varje ny 1155-NFT måste ha en egen json-fil
@@ -33,11 +35,12 @@
 
         // add from here down
         async function login() {
-        let user = Moralis.User.current();
-        if (!user) {
-            user = await Moralis.authenticate();
-        }
-        console.log("logged in user:", user);
+            let user = Moralis.User.current();
+            if (!user) {
+                user = await Moralis.authenticate();
+            }
+            console.log("logged in user:", user);
+            window.location.replace("ipfs.html");
         }
 
         async function logOut() {

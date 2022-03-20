@@ -1,24 +1,39 @@
+<!DOCTYPE html>
 <html>
   <head>
     <!-- Moralis SDK code -->
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <script src="https://unpkg.com/moralis/dist/moralis.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>IPFS upload</title>
   </head>
   <body>
     <h1>IPFS demo</h1>
 
     <!--<button id="btn-login">Login</button><br><br>-->
-    <input type="text" name="metaDataName" id="metaDataName" placeholder="name"><br>
-    <textarea name="metaDataDescription" id="metaDataDescription" cols="30" rows="10"></textarea>
-    <input type="file" name="fileInput" id="fileInput"><br><br>
+    <select name = "Contract" id = "contract">
+    </select> <br>
+    <input type = "text" name ="numberOfNFT" id = "numberOfNFT" placeholder="Number of NFT's"> <br>
+    <h3>Metadata</h3>
+    <input type="text" name="metaDataName" id="metaDataName" placeholder="Name"><br>
+    <textarea name="metaDataDescription" id="metaDataDescription" cols="30" rows="10" placeholder="Description"></textarea> <br>
+    <h3>Choose files</h3> 
+    <b>Pictures: </b>
+    <input type="file" name="fileInput" id="fileInput" multiple ><br><br>
+    <b>3D Model: </b>
+    <input type = "file" name ="modelInput" id=" modelInput"> <br> <br>
     <button onclick=gogogo()>Gogogo</button>
 
     <script>
         
         const serverUrl = "https://3annjbia1vgr.usemoralis.com:2053/server";
         const appId = "aBJvVjmxBnIis9vINNfTCr4qv010ZHKtBGmdX5sq";
+        
+        const contractList = ["0x5C33F3F367Ff39791e798D8eF07A9c46db5Ee40F","opaidfhbaope0uifhnapwin"];
+
         Moralis.start({ serverUrl, appId });
+
+        
 
         // add from here down
         /*async function login() {
@@ -28,6 +43,18 @@
         }
         console.log("logged in user:", user);
         } */
+        
+
+        var select = document.getElementById("contract");
+        for(var i = 0; i<contractList.length; i++){
+            var option = document.createElement("option");
+            option.value = "test" + i.toString();
+            option.innerHTML = contractList[i];
+            select.appendChild(option);
+        }
+
+
+
 
         upLoadImage = async () => {
             const data = fileInput.files[0]
